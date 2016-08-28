@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link href='https://fonts.googleapis.com/css?family=Lobster' rel='stylesheet' type='text/css'>
+<link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet' type='text/css'>
+</head>
+    <style type="text/css">
+
+      html{
+        background-color: #F4F4F4;
+
+
+      }
+
+        #main{
+
+
+            width: 90%;
+            opacity: 0.9;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+
+            text-align: center;
+
+        }
+        h2{
+             font-family: 'Lobster', cursive;
+             display: inline;
+             font-size: 4.5em;
+             padding-top: 12%;
+
+        }
+
+        #greeting{
+          color: #373737;
+        }
+        #greetingName{
+          color: #c5b47c;
+        }
+
+        #endingPeriod{
+          color: #373737;
+        }
+
+
+
+
+        #menu{
+          margin-top:2%;
+
+        }
+
+        .styled-button{
+          border: #373737 5px solid;
+          font-family: 'Montserrat', sans-serif;
+          font-size: 2.2em;
+          color: #373737;
+          background-color: #F4F4F4;
+        }
+
+
+    </style>
+
+<div id='main'>
+    <h2 id='greeting'>Hi, I'm </h2>
+    <h2 id="greetingName"></h2>
+    <h2 id='endingPeriod'></h2>
+    <div id="menu">
+    <button id="resume" class="styled-button" style="margin-right: 2%; margin-top: 1%;" onmouseover="onmouseoverResume();" onmouseout="onmouseoutResume();" onclick="openResume();">
+      Resume</button>
+    <button id="github" class="styled-button" style="margin-right: 2%; margin-top: 1%;" onmouseover="onmouseoverGitHub();" onmouseout="onmouseoutGitHub();" onclick="openGitHub();">GitHub</button>
+    <button id="contact" class="styled-button" style="margin-top: 1%;" onmouseover="onmouseoverContact();" onmouseout="onmouseoutContact();" onclick="contactMe();">Contact</button>
+  </div>
+
+
+</div>
+
+
+
+    <script type="text/javascript">
+
+    window.onload = setTimeout(runGreeting, 400);
+
+      var greeting = "Hi, I'm ";
+      var name = "Clayton Marshall";
+      var count = 1;
+
+      function runGreeting(){
+
+        setTimeout(
+          function(){
+
+            if(name.length > 0){
+              document.getElementById('greetingName').innerHTML = document.getElementById('greetingName').innerHTML + name.substr(0,1);
+              name = name.substr(1);
+              runGreeting();
+            }else{
+              document.getElementById('endingPeriod').innerHTML = '.';
+            }
+
+
+          },
+          100
+        );
+
+      }
+
+      function onmouseoverResume(event){
+        document.getElementById('resume').style.opacity = 0.7;
+
+      }
+
+      function onmouseoutResume(event){
+          document.getElementById('resume').style.opacity = 1;
+      }
+
+      function onmouseoverGitHub(){
+        document.getElementById('github').style.opacity = 0.7;
+      }
+
+      function onmouseoutGitHub(){
+        document.getElementById('github').style.opacity = 1;
+      }
+
+      function onmouseoverContact(){
+      document.getElementById('contact').style.opacity = 0.7;
+      }
+
+      function onmouseoutContact(){
+        document.getElementById('contact').style.opacity = 1;
+      }
+
+      function openGitHub(){
+        window.open('https://github.com/marsha88/');
+      }
+
+      function openResume(){
+        window.open ('resume.pdf');
+      }
+
+      function contactMe(){
+        window.location.href = "mailto:marsha88@purdue.edu";
+      }
+
+
+/*
+border: 5px black solid;
+border-radius: 25px;
+background-color:#bfbfbf;
+*/
+
+/*Shades of gold
+  #C0B283;
+  #c5b47c   //current
+  #b9a460
+*/
+
+    </script>
+
+
+</html>
