@@ -9,13 +9,9 @@
 
       html{
         background-color: #F4F4F4;
-
-
       }
 
         #main{
-
-
             width: 90%;
             opacity: 0.9;
             position: absolute;
@@ -24,14 +20,13 @@
             transform: translate(-50%, -50%);
 
             text-align: center;
-
         }
+
         h2{
              font-family: 'Lobster', cursive;
              display: inline;
              font-size: 4.5em;
              padding-top: 12%;
-
         }
 
         #greeting{
@@ -44,9 +39,6 @@
         #endingPeriod{
           color: #373737;
         }
-
-
-
 
         #menu{
           margin-top:2%;
@@ -64,19 +56,19 @@
 
     </style>
 
-<div id='main'>
-    <h2 id='greeting'>Hi, I'm </h2>
-    <h2 id="greetingName"></h2>
-    <h2 id='endingPeriod'></h2>
-    <div id="menu">
-    <button id="resume" class="styled-button" style="margin-right: 2%; margin-top: 1%;" onmouseover="onmouseoverResume();" onmouseout="onmouseoutResume();" onclick="openResume();">
-      Resume</button>
-    <button id="github" class="styled-button" style="margin-right: 2%; margin-top: 1%;" onmouseover="onmouseoverGitHub();" onmouseout="onmouseoutGitHub();" onclick="openGitHub();">GitHub</button>
-    <button id="contact" class="styled-button" style="margin-top: 1%;" onmouseover="onmouseoverContact();" onmouseout="onmouseoutContact();" onclick="contactMe();">Contact</button>
-  </div>
+    <div id='main'>
+        <h2 id='greeting'>Hi, I'm </h2>
+        <h2 id="greetingName"></h2>
+        <h2 id='endingPeriod'></h2>
+        <div id="menu">
+        <button id="resume" class="styled-button" style="margin-right: 2%; margin-top: 1%;" onmouseover="onmouseoverResponse(this);" onmouseout="onmouseoutResponse(this);" onclick="openResume();">
+          Resume</button>
+        <button id="github" class="styled-button" style="margin-right: 2%; margin-top: 1%;" onmouseover="onmouseoverResponse(this);" onmouseout="onmouseoutResponse(this);" onclick="openGitHub();">GitHub</button>
+        <button id="contact" class="styled-button" style="margin-top: 1%;" onmouseover="onmouseoverResponse(this);" onmouseout="oonmouseoutResponse(this);" onclick="contactMe(this);">Contact</button>
+      </div>
 
 
-</div>
+    </div>
 
 
 
@@ -101,37 +93,20 @@
               document.getElementById('endingPeriod').innerHTML = '.';
             }
 
-
           },
           100
         );
 
       }
 
-      function onmouseoverResume(event){
-        document.getElementById('resume').style.opacity = 0.7;
-
+      function onmouseoverResponse(tag){
+        tag.style.opacity = 0.7;
       }
 
-      function onmouseoutResume(event){
-          document.getElementById('resume').style.opacity = 1;
+      function onmouseoutResponse(tag){
+        tag.style.opacity = 1;
       }
 
-      function onmouseoverGitHub(){
-        document.getElementById('github').style.opacity = 0.7;
-      }
-
-      function onmouseoutGitHub(){
-        document.getElementById('github').style.opacity = 1;
-      }
-
-      function onmouseoverContact(){
-      document.getElementById('contact').style.opacity = 0.7;
-      }
-
-      function onmouseoutContact(){
-        document.getElementById('contact').style.opacity = 1;
-      }
 
       function openGitHub(){
         window.open('https://github.com/marsha88/');
@@ -145,20 +120,6 @@
         window.location.href = "mailto:marsha88@purdue.edu";
       }
 
-
-/*
-border: 5px black solid;
-border-radius: 25px;
-background-color:#bfbfbf;
-*/
-
-/*Shades of gold
-  #C0B283;
-  #c5b47c   //current
-  #b9a460
-*/
-
     </script>
-
 
 </html>
