@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Intro to Crypto</title>
+</head>
+<body style="margin: 10%; font-family: sans-serif; font-size: 20px">
+  <h1><a id="Intro_to_Cryptocurrencies_0"></a>Intro to Cryptocurrencies</h1>
+  <p>I’ve attempted to put together a little article here to help you understand what cryptocurrency is and how it really works under the hood. I also added links to other articles that do a better job of explaining things than I ever could. I am going to start by talking about what the hell a Bitcoin actually is, then I’ll go into details about how the Bitcoin network maintains itself, and lastly I may throw in some info on how crypto trading works. So, hopefully by the end of this you will have a decent grasp on how these digital currencies work, or at the very least you’ll be able to mansplain it to someone else at a party.</p>
+  <p><em>Sidenote: Throughout this article I will always be referring to bitcoin, but the same explanation is valid for other cryptocurrencies.</em></p>
+  <h3><a id="What_is_a_Bitcoin_6"></a>What is a Bitcoin?</h3>
+  <hr>
+  <p>First, it’s important to understand that in order to use Bitcoin as a day to day currency you don’t <strong>NEED</strong> to understand how it works. There are many easy to use Bitcoin wallets available that allow you to spend and receive Bitcoin with ease. It’s very similar to credit cards. I have no clue how my credit card actually sends payments to and from my bank, but I’m still able to use it every day.</p>
+  <p>At its simplest form Bitcoin is just a ledger system. So, imagine that our group decided to go for round 2 in Gatlinburg, but some of us forgot our wallets so we needed to keep track of who owed who money on a spreadsheet. It may look something like this…</p>
+  <table class="table table-striped table-bordered" style="border-width: 1px; border-color: black; border-style: solid">
+    <thead>
+      <tr>
+        <th style="text-align:left">Transaction</th>
+        <th style="text-align:left">Amount</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Clayton Pays Nathan</td>
+        <td style="text-align:right">$16</td>
+      </tr>
+      <tr>
+        <td>Sam Pays Chris</td>
+        <td style="text-align:right">$12</td>
+      </tr>
+      <tr>
+        <td>Bonnie Pays Sam</td>
+        <td style="text-align:right">$5</td>
+      </tr>
+    </tbody>
+  </table>
+  <p>…and then at the end of the trip when we all get our wallets we pay each other back. This is similar to how Bitcoin works except that the ledger is being maintained by millions of people, and when you add millions of people to this type of ledger system you lose something that we had relied on in our ledgers model. Trust. So let’s assume we had a ledger system similar to the one we used on our trip to Gatlinburg and let’s also assume that these 1 million people all had access to this spreadsheet. What’s preventing me from adding the following lines to the ledger?</p>
+  <table class="table table-striped table-bordered" style="border-width: 1px; border-color: black; border-style: solid">
+    <thead>
+      <tr>
+        <th style="text-align:left">Transaction</th>
+        <th style="text-align:left">Amount</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Bob Pays Clayton</td>
+        <td style="text-align:right">$16000</td>
+      </tr>
+      <tr>
+        <td>Sam Pays Clayton</td>
+        <td style="text-align:right">$12000</td>
+      </tr>
+      <tr>
+        <td>Donald Pays Clayton</td>
+        <td style="text-align:right">$4000</td>
+      </tr>
+    </tbody>
+  </table>
+  <p>The answer is that nothing would prevent me from doing this. The only reason I wasn’t able to do this in the ledger we used in Gatlinburg was because there were only 6 of us and its easily verifiable by 6 people, but to get 1 million people to verify every single transaction would result in extremely slow transfer rates. So, in order to embed “trust” into the bitcoin network we use something called digital signitures. Digital signitures allow a user to sign a transaction to ensure that it was actually made by them and not another user on the network.</p>
+  <p>This is a topic you can avoid the details of if you’d like, but the underlying cryptography is really interesting. You can find an intro to it <a href="http://afongen.com/writing/pke/">here</a> and some other “googleable” terms are “public/private key cryptography”, “RSA cryptography”, and “digital signitures in cryptocurrencies”.</p>
+  <p><strong>TLDR:</strong> Digital signitures are a technology that relies on the factorization of large prime numbers and allows for someone to verify that they are who they say they are. At its core the digital signiture is just an astronimacally large number that is not easily duplicated. When I say not easily duplicated I mean it would take another computer multiple lifetimes to recompute. This allows us to guarentee forced trust in our ledger.</p>
+  <p>Cool, so we now have a ledger system that would work if we brought any number of people to GattyB with us. We’re not quite to bitcoin’s level yet, but we’re getting closer. The largest difference right now is that we are just using this ledger as a reminder for who owes who money. Instead of setting up this ledger system to check who owes who at the end of each month, why don’t we all throw in $100 each to this system and spend money between each other on the ledger. There is no longer any settling up to do at the end of the month and we are still able to pay each other back and forth with ease. What we’ve now created is a less impressive version of Venmo. To make things more fun we’ll call the money in our ledger “Ledger Coin” or LC for short. So now we have a ledger that may look like this…</p>
+  <blockquote>
+    <p>At first we all get our 100LC from paying $100 and then upon spending LC our totals are updated accordinly.</p>
+  </blockquote>
+  <table class="table table-striped table-bordered" style="border-width: 1px; border-color: black; border-style: solid">
+    <thead>
+      <tr>
+        <th style="text-align:left">Transaction</th>
+        <th style="text-align:left">Amount</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Amount Update (Clayton)</td>
+        <td style="text-align:right">100LC</td>
+      </tr>
+      <tr>
+        <td>Amount Update (Sam)</td>
+        <td style="text-align:right">100LC</td>
+      </tr>
+      <tr>
+        <td>Amount Update (Bonnie)</td>
+        <td style="text-align:right">100LC</td>
+      </tr>
+      <tr>
+        <td>Amount Update (Nathan)</td>
+        <td style="text-align:right">100LC</td>
+      </tr>
+      <tr>
+        <td>Amount Update (Chris)</td>
+        <td style="text-align:right">100LC</td>
+      </tr>
+      <tr>
+        <td>Nathan pays Chris</td>
+        <td style="text-align:right">10LC</td>
+      </tr>
+      <tr>
+        <td>Amount Update (Nathan)</td>
+        <td style="text-align:right">90LC</td>
+      </tr>
+      <tr>
+        <td>Amount Update (Chris)</td>
+        <td style="text-align:right">110LC</td>
+      </tr>
+      <tr>
+        <td>Sam pays Bonnie</td>
+        <td style="text-align:right">20LC</td>
+      </tr>
+      <tr>
+        <td>Amount Update (Sam)</td>
+        <td style="text-align:right">80LC</td>
+      </tr>
+      <tr>
+        <td>Amount Update (Bonnie)</td>
+        <td style="text-align:right">120LC</td>
+      </tr>
+    </tbody>
+  </table>
+  <p>This is very similar to Bitcoin’s system. It’s just a ledger of amounts and owners.<br>
+    In the real world of cryptocurrency it isn’t names that are held within the ledger like “Nathan” and “Sam”, but instead it is what’s called your “public key”(this is the same public key I mentioned earlier in the googleable terms). For example, my Litecoin address is <code>LPZGsEqKDFzK1wn7fvrPtooqWRr7Tq7nzw</code>. So on some file in the Litecoin network is a row of data that says…</p>
+    <table class="table table-striped table-bordered" style="border-width: 1px; border-color: black; border-style: solid">
+      <thead>
+        <tr>
+          <th style="text-align:left">Transaction</th>
+          <th style="text-align:left">Litecoin</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>LPZGsEqKDFzK1wn7fvrPtooqWRr7Tq7nzw</td>
+          <td style="text-align:right">10</td>
+        </tr>
+      </tbody>
+    </table>
+    <p>Now, let’s take a step back and look at what we’ve designed. It’s a ledger system that maintains a bunch of transactions and amounts in this new currency we’ve called Ledger Coin. The system is fool proof. No one can create a fake transaction or spend more than they own, and with this system we never have to carry around cash anymore! But how is this different than Venmo, Paypal, or your debit card. In short, it isn’t. The only difference that exists is that our currency is called Ledger Coin and these other systems use US Dollars. The thing that separates Bitcoin from a Venmo is that Bitcoin is decentralized. Meaning no one person or entity owns the ledger. The ledger is maintained by thousands of computers across the Bitcoin network which is made possible by a system called the blockchain. Blockchain (2017’s buzz-word of the year) is where things are going to get a little confusing and to explain it I have to get into some of the nitty-gritty.</p>
+    <h3><a id="Blockchain_The_Backbone_of_all_Cryptocurrencies_57"></a>Blockchain: The Backbone of all Cryptocurrencies</h3>
+    <hr>
+    <p>Coming Soon.</p>
+    <h4><a id="Additional_Links_to_Check_out_61"></a>Additional Links to Check out:</h4>
+    <p>Great article on the economic needs for cryptocurrency. This article talks very little about the internals of how crypto works, but discusses more about why its exitstence is important.<br>
+      <a href="https://medium.com/@intenex/cryptocurrency-101-7197684775fd">https://medium.com/@intenex/cryptocurrency-101-7197684775fd</a></p>
+    </body>
+  </html>

@@ -1,8 +1,24 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
 <head>
-  <meta charset="utf-8">
   <title>Intro to Crypto</title>
+  <meta charset="utf-8">
+  <meta name="author" content="Clayton Marshall">
+  <style>
+    .table {
+      border-width: 1px;
+      border-color: black;
+      border-style: solid;
+    }
+    th {
+      text-align: left;
+    }
+    tr {
+        border-width: 1px;
+        border-color: black;
+        border-style: solid;
+    }
+  </style>
 </head>
 <body style="margin: 10%; font-family: sans-serif; font-size: 20px">
   <h1><a id="Intro_to_Cryptocurrencies_0"></a>Intro to Cryptocurrencies</h1>
@@ -12,11 +28,11 @@
   <hr>
   <p>First, it’s important to understand that in order to use Bitcoin as a day to day currency you don’t <strong>NEED</strong> to understand how it works. There are many easy to use Bitcoin wallets available that allow you to spend and receive Bitcoin with ease. It’s very similar to credit cards. I have no clue how my credit card actually sends payments to and from my bank, but I’m still able to use it every day.</p>
   <p>At its simplest form Bitcoin is just a ledger system. So, imagine that our group decided to go for round 2 in Gatlinburg, but some of us forgot our wallets so we needed to keep track of who owed who money on a spreadsheet. It may look something like this…</p>
-  <table class="table table-striped table-bordered" style="border-width: 1px; border-color: black; border-style: solid">
+  <table class="table table-striped table-bordered">
     <thead>
       <tr>
-        <th style="text-align:left">Transaction</th>
-        <th style="text-align:left">Amount</th>
+        <th>Transaction</th>
+        <th style="text-align:right">Amount</th>
       </tr>
     </thead>
     <tbody>
@@ -35,11 +51,11 @@
     </tbody>
   </table>
   <p>…and then at the end of the trip when we all get our wallets we pay each other back. This is similar to how Bitcoin works except that the ledger is being maintained by millions of people, and when you add millions of people to this type of ledger system you lose something that we had relied on in our ledgers model. Trust. So let’s assume we had a ledger system similar to the one we used on our trip to Gatlinburg and let’s also assume that these 1 million people all had access to this spreadsheet. What’s preventing me from adding the following lines to the ledger?</p>
-  <table class="table table-striped table-bordered" style="border-width: 1px; border-color: black; border-style: solid">
+  <table class="table table-striped table-bordered">
     <thead>
       <tr>
-        <th style="text-align:left">Transaction</th>
-        <th style="text-align:left">Amount</th>
+        <th>Transaction</th>
+        <th style="text-align:right">Amount</th>
       </tr>
     </thead>
     <tbody>
@@ -64,11 +80,11 @@
   <blockquote>
     <p>At first we all get our 100LC from paying $100 and then upon spending LC our totals are updated accordinly.</p>
   </blockquote>
-  <table class="table table-striped table-bordered" style="border-width: 1px; border-color: black; border-style: solid">
+  <table class="table table-striped table-bordered">
     <thead>
       <tr>
-        <th style="text-align:left">Transaction</th>
-        <th style="text-align:left">Amount</th>
+        <th>Transaction</th>
+        <th style="text-align:right">Amount</th>
       </tr>
     </thead>
     <tbody>
@@ -120,11 +136,11 @@
   </table>
   <p>This is very similar to Bitcoin’s system. It’s just a ledger of amounts and owners.<br>
     In the real world of cryptocurrency it isn’t names that are held within the ledger like “Nathan” and “Sam”, but instead it is what’s called your “public key”(this is the same public key I mentioned earlier in the googleable terms). For example, my Litecoin address is <code>LPZGsEqKDFzK1wn7fvrPtooqWRr7Tq7nzw</code>. So on some file in the Litecoin network is a row of data that says…</p>
-    <table class="table table-striped table-bordered" style="border-width: 1px; border-color: black; border-style: solid">
+    <table class="table table-striped table-bordered">
       <thead>
         <tr>
-          <th style="text-align:left">Transaction</th>
-          <th style="text-align:left">Litecoin</th>
+          <th>Transaction</th>
+          <th style="text-align:right">Litecoin</th>
         </tr>
       </thead>
       <tbody>
@@ -137,9 +153,52 @@
     <p>Now, let’s take a step back and look at what we’ve designed. It’s a ledger system that maintains a bunch of transactions and amounts in this new currency we’ve called Ledger Coin. The system is fool proof. No one can create a fake transaction or spend more than they own, and with this system we never have to carry around cash anymore! But how is this different than Venmo, Paypal, or your debit card. In short, it isn’t. The only difference that exists is that our currency is called Ledger Coin and these other systems use US Dollars. The thing that separates Bitcoin from a Venmo is that Bitcoin is decentralized. Meaning no one person or entity owns the ledger. The ledger is maintained by thousands of computers across the Bitcoin network which is made possible by a system called the blockchain. Blockchain (2017’s buzz-word of the year) is where things are going to get a little confusing and to explain it I have to get into some of the nitty-gritty.</p>
     <h3><a id="Blockchain_The_Backbone_of_all_Cryptocurrencies_57"></a>Blockchain: The Backbone of all Cryptocurrencies</h3>
     <hr>
-    <p>Coming Soon.</p>
-    <h4><a id="Additional_Links_to_Check_out_61"></a>Additional Links to Check out:</h4>
-    <p>Great article on the economic needs for cryptocurrency. This article talks very little about the internals of how crypto works, but discusses more about why its exitstence is important.<br>
-      <a href="https://medium.com/@intenex/cryptocurrency-101-7197684775fd">https://medium.com/@intenex/cryptocurrency-101-7197684775fd</a></p>
-    </body>
-  </html>
+    <p>Blockchain is a technology that has hundreds of potential applications outside of the cryptocurrency world, but it was first invented to solve this decentralization issue for crypto and more specifically Bitcoin. The original <a href="https://bitcoin.org/bitcoin.pdf">Bitcoin paper</a> by Satoshi Nakamoto is what introduced this idea of maintaining a single ledger across millions of different machines. It’s a pretty short paper and definitely worth a read if you’d like to hear it from the OG himself.<br>
+      Simply put though, the blockchain is just a way for us to split up our ledger into smaller blocks where each block contains information about the previous block and contains the address of the next block in memory. For example, our original ledger coin system may take a similar shape to that image below if it was on a blockchain.</p>
+      <img src="./blockchains.png" height="150px" />
+      <p>Now let’s set the stage for how this system will operate. First, I’m going to describe the entire blockchain protocol, and then I’ll explain why each part of it is necessary in order for the system to work correctly. Within our system there are two kinds of people on the network. Miners and users. Users are those of us who use the cryptocurrency to pay bills, our friends, etc. and miners are those who listen for our transactions, and add them to the blockchain.</p>
+      <h4><a id="Transaction_Walkthrough_66"></a>Transaction Walkthrough</h4>
+      <p>I may want to pay my brother back for lunch one day using my large stash of ledger coin. So, inside my digital ledger coin wallet (I will discuss exactly what a crypto wallet does later, but for now just think of it like the PayPal or Venmo app), I will request to send 2 ledger coins to Connor. In order for this to work I will need Connor’s public address which we will say is <code>Lj5n43k3m</code>. Now inside the wallet I will select the payment amount and supply it with this Connor’s public address. By submitting this payment what I’m actually doing is sending out the following information to miners on the network.<br>
+        (Assume that first address below is my public key)</p>
+        <table class="table table-striped table-bordered">
+          <thead>
+            <tr>
+              <th>Transaction</th>
+              <th style="text-align:right">LedgerCoin</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>LPZGsEqK</code> to   <code>Lj5n43k3m</code></td>
+              <td style="text-align:right">2</td>
+            </tr>
+          </tbody>
+        </table>
+        <p>Once a miner recieves this information they will add this transaction to their current block, which is just a set of other transactions that have been sent to the miner. While miners are receiving blocks and recording them they are also in a race with other miners on the network to find a specific number that together with the information in the current block, and the hash information of the previous block in the chain form another “code” we’ll call it, that must match a specific pattern. “Clayton, that makes no god damn sense.” No, that wasn’t the best explanation, but this is a bit difficult to grasp at first. Let’s look at this in terms of a math function and it may make a bit more sense. First, assume we already a have chain of blocks in our blockchain and each block has a particular “hash code” that belongs to it. When a miner wishes to add a new block to chain it must use its current block’s information (the actual contents of the transactions. Not the hash code I mentioned above), the previous blocks hash code, and lastly a random number to satisfy the following function.</p>
+        <pre><code>f(block info, previous hash, random number) = pattern
+        </code></pre>
+        <p>So, <code>f</code> is a function that takes these 3 values and outputs some huge number, and in order for that miner’s block to be added to the end of the blockchain, that huge number must meet some pattern requirements. For example, in the current Bitcoin blockchain that pattern is any number that begins with 10 zeros. We’ll see the purpose behind this in a bit, but for now you should know that the job of the miner is to be guessing this random number in order to find a pattern that works. This takes a lot of work which is why these machines are called “miners” in the first place. Once the miner finds this random value that makes <code>f(block info, previous hash, random number) = pattern</code> then that random number becomes this current block’s hashcode or as it’s also commonly called, its “proof of work”. So let’s say I own a machine that is a miner on a crypto network, and my miner just guessed the correct random number to satisfy the function I showed above. The next step is to send out this updated block to the users on the network. So, all users listen for now is updates from miners and all miners will do is listen for transactions for users, add these transactions to their current block, and lastly they will try to guess different values as fast as they can in order to add their current block to the global blockchain.</p>
+        <p>You may have heard about mining Bitcoin on the news before or maybe you’ve seen a short documentary on people that make a living mining Bitcoin. A common question is: how do these people make money doing this? When miners successfully add a block to the global blockchain they get a reward for their hardwork. Whenever they find the correct random value that meets pattern requirements they add a line to the top of their current block that is a “miner reward”. So they are basically forming Bitcoin out of thin air. This leads a lot of people to think that their is an unlimited supply of Bitcoin, but this isn’t the case. The amount of Bitcoin rewarded to miners slowly decreases over time, and in fact the planned rate of decrease was set to be parallel with that of gold. In the beginning of Bitcoin’s existence, the reward was 50BTC (BTC is short for Bitcoin) for adding a block to the blockchain, but this has since decreased to 12.5BTC. This will continue until the ledger reaches its max amount of BTC, 21 million. At which point the only money miners will be making is transaction fees.</p>
+        <p><em>Sidenote: If you want to dig through all the info inside a single block in the Bitcoin blockchain you can go <a href="https://blockexplorer.com/block/00000000839a8e6886ab5951d76f411475428afc90947ee320161bbf18eb6048">here</a>. That link is to the very first block in the BTC blockchain, but you search for any block that has ever been added and see every transaction it published to the global blockchain.</em></p>
+        <p>Alright now for the <em>why</em> portion of all this. The main item that needs addressing is why mining exists in the first place. Remember when we forged trust into our Gatlinburg ledger system using digital signitures? Well, since that system was centralized that was all the security we needed. Bitcoin is decentralized so while digital signitures are still used we need something else to ensure this system works the way it should. The only good way to explain why mining is the way to keep the blockchain afloat is by trying to think of a way to break the blockchain. So, here is a quick story to do just that…</p>
+        <p>Let’s assume I was being held for ransom by the Italian mafia and in exchange for my freedom they wanted 20BTC. That’s a lot of BTC, so first we need to think of a way to avoid aquiring all that BTC. Is there any way we could spoof the transaction so that the mafia would think they had 20BTC when in reality they didn’t? So, unfortunately to pull this swindle we will actually need 20BTC. So, someone starts a GoFundMe to help save Clayton from the mafia and the funds pile up and we’re at 20BTC in no time. Now the person whos currently carrying this 20BTC could save my life, or at the current price of Bitcoin, could purchase a 2017 lime green Lamborghini Huracan. Fortunately enough, the person who was about to trade my life for 602 horsepower is a bit greedy and decides they want me and the car. So how could they do it? Well, since we know the public address of the mafia members requesting the money we could send them a spoofed block that looks like it came from a miner, but is actually just a block from us. This way the 20BTC seems like it has been sent to the mafia, but really it only looks that way on the blockchain that the mafia sees (the block sent by us), while the rest of the world is getting the real updates from miners. So in the eyes of everyone else on the Bitcoin network this person still has 20BTC and is one trip from the dealership away from taking home that shiny new Huracan.</p>
+        <p>This is what’s called the double spending problem and it is the reason that decentralized ledgers are difficult to maintain. But, when Satoshi Nakamoto proposed his idea for the blockchain he had a solution to this. He proposed the following rule: “Always rely on the blockchain with the most computational work put into it”. That rule will make sense soon; keep reading. Back to the mafia example… We wanted to send a spoofed block to the mafia, but the only way to do this is to go through the process of guessing the correct random value that satisifies the BTC pattern requirements. This is the only way we could ever spoof the block because otherwise, the mafia could check the existing blockchain they had been relying on and see that our spoofed block didn’t proivde the correct hash/“proof of work” that was need to be added to the chain. So, the only possible way to give them a spoofed block is to find a valid proof of work for the block and then send it to them. Here’s the issue though… Finding that proof of work (the random number) is very difficult, and in order to properly fool the mafia we would have to continue guessing correct values for successive blocks to make them think the blockchain we are sending them is valid. While this is still possible to pull off, we have to remember that the mafia is also listening to blockchain updates from actual miners too. The mafia won’t select a blockchain as the valid one until one of them grows much longer than the other. In other words they will, as Satoshi Nakamoto put it, “Always rely on the blockchain with the most computational work put into it”.</p>
+        <p>In order to get me freed and to buy that new car, the holder of the 20BTC would have to outdue millions of other miners on the Bitcoin network in order to pull off this one scam. The key idea here is that more blocks = more computational work, and the blockchain that is trusted by all users is the one with the most computational work put into it.</p>
+        <p>The only way to give reasonable odds at abusing this double spending problem is to own over half the machines on the Bitcoin network. Basically, if you own 51% of the machines on the BTC network you have a fighting chance of being able to outdue the other machines regarding computational work, thus creating a longer blockchain and eventually fooling your victim. You may be thinking this is a vulnerability in the system, and technically speaking yes, this could be attacked, but with the current size of the BTC network, the power of multiple governments and militaries couldn’t mangage to pull this off even if they tried. These crypto networks are so large that this will likely never work on any established cryptocurrency and certainly not Bitcoin.</p>
+        <h3><a id="Getting_Rich_on_Bitcoin_with_Tai_Lopez_93"></a>Getting Rich on Bitcoin with Tai Lopez</h3>
+        <hr>
+        <p>Many people are confused as to what gives Bitcoin value. It’s a totally valid question, but it seems odd that someone from a first world country wouldn’t understand how something with no physical value is worth so much. Here is what I mean by that…<br>
+          What gives the US dollar value? A lot of people may say its backed by the value of gold, but the gold standard was dropped decades ago. The US dollar is what is called a <em>fiat</em> currency, meaning that the only thing backing its value is faith in the government that owns and regulates it. Which is funny because that’s the same government that couldn’t maintain the gold standard and more recently elected a real estate agent as president. So, the reason Bitcoin has value is the same reason the US dollar is valuble: people think it’s valuable and because of this it can be traded for physical goods.<br>
+          You may not think Bitcoin can be traded often but companies are actually beginning to accept it as a payment option which is giving it better trade value and thus the price is going up. One last reason that shouldn’t be overlooked about Bitcoin’s value is that Bitcoin is scarce. As I explained in the mining section above there is a finite supply of Bitcoin which is unlike the US dollar that is being printed more and more by the second.</p>
+          <p>It’s time we look at crypto trading and how people are getting rich, and going broke because of it! The price of cyptocurrencies fluctates based on a few things. First, supply and demand. When you first heard about Bitcoin it was probably from a news article or facebook post in the past month or so. Bitcoin was getting a lot of publicity at that time which caused more people to jump on board the bitcoin train and thus the supply went down, demand went up, and the price skyrocketed to $20,000. So, supply and demand is the largest reason price goes up and down, but there are reasons aside from publicity that cause this demand. The one I see being the most influential is a crytpo’s legitimacy in the real world. When businesses start accepting Bitcoin as payment for their products and services the price will naturally go up because it is now usable in the real world, and looks more appealing to investors and everyday spenders. Quick example… Rumors are currently spreading that Spotify is about to start accepting Litecoin as payment. Price has been slowly creeping up and if they do decide to accept Litecoin the price of the coin will spike up very quickly. If I were an investor I could buy $1000 of Litecoin now and then once Spotify makes their announcement, I would sell it all for a pretty big profit.</p>
+          <p>People also loose quite a bit of money too and it’s usually those that are new to investing with crypto. When prices begin to rise is when there is the most hype around a crypto, and when more hype comes, more people buy into it, and then the prices goes up even more. After it peaks the price will likely drop (this is called a price correction), and at the risk of losing everything people will sell out while they still have something. Here are some quick investment tips that no one seems to understand…</p>
+          <p>1.) Buy low. Sell high.<br>
+            2.) Don’t invest more than you can afford to lose.</p>
+            <p>This being said, the people that make huge money off cryptocurrencies, stocks, etc. don’t follow these rules either. This is more of a strategy for those of us whose lives don’t depend on results of investments. By following these two guidelines you won’t win big or lose big, but if you play your cards right you can still come out with a good chunk of change.</p>
+            <p>The last reason that prices go up and down so much is due to investors called “whales” that will buy a ton of a certain cryptocurrency and the dump it all at once. This creates a huge supply increase and thus the price will drop. This reason technically fits in the supply and demand category, but it happens often enough that I thought I’d mention it separately.</p>
+            <h3><a id="Getting_your_name_on_the_Blockchain_110"></a>Getting your name on the Blockchain</h3>
+            <hr>
+            <p>If you’d like to start buying a cryptocurrency I’ve provided some steps and a few tips on what to buy, what not to buy, and how you can keep up with the trends in the crypto community. If you aren’t interested in buying any crypto then feel free to skip this section entirely.</p>
+            <p>…coming soon.</p>
+          </body>
+          </html>
