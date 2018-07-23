@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8">
+  <title>Functional DS</title>
+</head>
+<body>
+  <h1><a id="Lists_out_of_Lambda__Church_Encodings_0"></a>Lists out of Lambda + Church Encodings</h1>
+  <p>In this article we’ll be walking through a programming exercise. This isn’t a presentation on a new technology or concept, but instead we’re going to expand on some old ones. One in particular: functions.</p>
+  <p>I got the idea for this talk/article from another article called <a href="http://stevelosh.com/blog/2013/03/list-out-of-lambda/">List out of Lambda</a> by <a href="https://github.com/sjl">Steve Losh</a>. I highly recommend taking the time to read this article. I’m going to expand on what List out of Lambda provides and go a little futher while also leaving out some of the additional info the article goes in to (again, go read list out of lambda because it’s awesome).</p>
+  <h2><a id="Goals_5"></a>Goals:</h2>
+  <p>Learn to think more abstractly about language functionality.<br>
+    The goal of today is to rebuild language functionality without the provided tools given by the language. We’ll be writing a javascript list data structure using <strong>nothing</strong> but functions.</p>
+    <h2><a id="Disclaimer_9"></a>Disclaimer:</h2>
+    <p>You will not take any of this code back to your desk and push it to the next deployment. Much of this isn’t practical code to write, but the concepts are still valuable to understand.</p>
+    <h2><a id="Prereqs_12"></a>Prereqs:</h2>
+    <p>To get the most out of this, you will need to know a bit about javascript functions (specifically how closures work).<br>
+      Here is a quick example that will prepare you for what’s to come.</p>
+      <pre><code class="language-javascript">
+        <span class="hljs-keyword">const</span> x = <span class="hljs-number">5</span>
+
+        <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">f</span>(<span class="hljs-params">x</span>) </span>{
+          <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+            <span class="hljs-built_in">console</span>.log(x)
+          }
+        }
+
+        <span class="hljs-keyword">const</span> g = f(<span class="hljs-number">4</span>)
+
+        g()  <span class="hljs-comment">// &lt;--- What's the output?</span>
+      </code></pre>
+      <p>How does this work? By returning a function from within a function you not only get the returned function when called, but the returned function also gets access to its outer environment at the time it was created.</p>
+      <p>Another quick closure example:</p>
+      <pre><code class="language-javascript"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">multiplyBy</span>(<span class="hljs-params">x</span>) </span>{
+        <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">y</span>) </span>{
+          <span class="hljs-keyword">return</span> x * y
+        }
+      }
+
+      <span class="hljs-keyword">const</span> double = multiplyBy(<span class="hljs-number">2</span>)  <span class="hljs-comment">// we've just created a specialized function</span>
+
+      double(<span class="hljs-number">4</span>)   <span class="hljs-comment">// 8</span>
+      double(<span class="hljs-number">12</span>)  <span class="hljs-comment">// 24</span>
+    </code></pre>
+    <h2><a id="Lets_Begin_48"></a>Let’s Begin</h2>
+    <hr>
+    <p>What if Javascript didn’t provide us with a list-like structure? No arrays, no objects. Is it possible to build our own?</p>
+    <p>First, let’s build some criteria for this list structure.</p>
+    <p>Wish List (pun intended):</p>
+    <ol>
+      <li>We need some concept of an empty list.</li>
+      <li>We need to be able to prepend items to the list.</li>
+      <li>We need to be able to get the head and tail of the list.</li>
+    </ol>
+    <p>So, this may sound very familiar to a linked list in many ways. However, we won’t be using direct memory references to chain<br>
+      items together. Instead we’ll be using closures to chain items together.</p>
+      <p>Here is the list functionality we’d like to have. (This isn’t valid javascript, this is just to give you some idea of our end goal.)</p>
+      <p>(In this example lists are denoted with parenthesis: <code>(1 2 3 4)</code>)</p>
+      <pre><code class="language-clojure">isEmpty ()          // true
+        isEmpty (1)         // false
+        head (1 2 3 4 5)    // 1
+        tail (1 2 3 4 5)    // (2 3 4 5)
+        prepend 1 (2 3 4 5) // (1 2 3 4 5)
+      </code></pre>
+      <p>We’ll start with the basics: the empty list. How will we define the empty list?<br>
+        <code>null</code> seems appropriate for now. So, we’re able to implement one of our functions.</p>
+        <pre><code class="language-javascript"><span class="hljs-keyword">const</span> empty = <span class="hljs-literal">null</span>
+
+          <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">isEmpty</span>(<span class="hljs-params">list</span>) </span>{
+            <span class="hljs-keyword">return</span> list === empty
+          }
+
+          <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">prepend</span>(<span class="hljs-params">head, tail</span>) </span>{
+            <span class="hljs-comment">//TODO</span>
+          }
+
+          <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">head</span>(<span class="hljs-params">list</span>) </span>{
+            <span class="hljs-comment">//TODO</span>
+          }
+
+          <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">tail</span>(<span class="hljs-params">list</span>) </span>{
+            <span class="hljs-comment">//TODO</span>
+          }
+        </code></pre>
+        <p>Now let’s implement <code>prepend</code>. This is the hardest function to wrap your head around. Take a minute to read the prepend implementation below and think of how you might write head and tail. The goal of prepend is to add an element to the beginning of an existing list structure.</p>
+        <pre><code class="language-javascript"><span class="hljs-keyword">const</span> empty = <span class="hljs-literal">null</span>
+
+          <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">isEmpty</span>(<span class="hljs-params">list</span>) </span>{
+            <span class="hljs-keyword">return</span> list === empty
+          }
+
+          <span class="hljs-comment">// head will be the element to prepend to another list, tail.</span>
+          <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">prepend</span>(<span class="hljs-params">head, tail</span>) </span>{
+            <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">option</span>) </span>{
+              <span class="hljs-keyword">if</span>(option === <span class="hljs-string">"head"</span>) {
+                <span class="hljs-keyword">return</span> head
+              }
+              <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (option === <span class="hljs-string">"tail"</span>) {
+                <span class="hljs-keyword">return</span> tail
+              }
+            }
+          }
+
+          <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">head</span>(<span class="hljs-params">list</span>) </span>{
+            <span class="hljs-comment">//TODO</span>
+          }
+
+          <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">tail</span>(<span class="hljs-params">list</span>) </span>{
+            <span class="hljs-comment">//TODO</span>
+          }
+        </code></pre>
+        <p>Remember that when we return a function from another function the returned function also gets access to the outer environment where it was defined. So, in the case of <code>prepend</code> the function returned has access to both the <code>head</code> and <code>tail</code>.</p>
+        <p>With this in mind, how should head and tail be implemented? Remember that the head and tail functions are just given a list as an argument.</p>
+        <pre><code class="language-javascript"><span class="hljs-keyword">const</span> empty = <span class="hljs-literal">null</span>
+
+          <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">isEmpty</span>(<span class="hljs-params">list</span>) </span>{
+            <span class="hljs-keyword">return</span> list === empty
+          }
+
+          <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">prepend</span>(<span class="hljs-params">head, tail</span>) </span>{
+            <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">option</span>) </span>{
+              <span class="hljs-keyword">if</span>(option === <span class="hljs-string">"head"</span>) {
+                <span class="hljs-keyword">return</span> head
+              }
+              <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (option === <span class="hljs-string">"tail"</span>) {
+                <span class="hljs-keyword">return</span> tail
+              }
+            }
+          }
+
+          <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">head</span>(<span class="hljs-params">list</span>) </span>{
+            <span class="hljs-comment">// the empty list has no head element</span>
+            <span class="hljs-keyword">if</span>(!isEmpty(list)) {
+              <span class="hljs-keyword">return</span> list(<span class="hljs-string">"head"</span>)
+            }
+          }
+
+          <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">tail</span>(<span class="hljs-params">list</span>) </span>{
+            <span class="hljs-comment">// the empty list has no tail</span>
+            <span class="hljs-keyword">if</span>(!isEmtpy(list)) {
+              <span class="hljs-keyword">return</span> list(<span class="hljs-string">"tail"</span>)
+            }
+          }
+        </code></pre>
+        <p>Now we have all the functions we set out to create! But, how do we actually use our list structure?<br>
+          We wrap up multiple calls to prepend!</p>
+          <pre><code class="language-javascript"><span class="hljs-keyword">const</span> myList = prepend(<span class="hljs-number">1</span>, prepend(<span class="hljs-number">2</span>, prepend(<span class="hljs-number">3</span>, empty)))
+            head(myList)  <span class="hljs-comment">// 1</span>
+            tail(myList)  <span class="hljs-comment">// prepend(2, prepend( 3, empty))</span>
+          </code></pre>
+          <p>WE HAVE A LIST!<br>
+            But where is the data stored? In the closure of each function call!</p>
+            <p><em>Quick Aside:<br>
+              If you’d like to do some playing around with lists but don’t want to keep typing all the prepend calls just use this function for some quick list creation.</em></p>
+              <pre><code class="language-javascript"><span class="hljs-keyword">const</span> createList = (...args) =&gt; args.reverse().reduce((acc, el) =&gt; prepend(el, acc), empty)
+
+                <span class="hljs-comment">// Usage:</span>
+                <span class="hljs-keyword">const</span> disappointing_movies = createList(<span class="hljs-string">"Shrek 3"</span>,
+                <span class="hljs-string">"Mighty Ducks 2"</span>,
+                <span class="hljs-string">"The Last Airbender"</span>,
+                <span class="hljs-string">"Eragon"</span>,
+                <span class="hljs-string">"Man of Steel"</span>)
+              </code></pre>
+              <p>To get more familar with this let’s write some list operations using our awesome new list strctures!</p>
+              <pre><code class="language-javascript"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">length</span>(<span class="hljs-params"></span>) </span>{
+                <span class="hljs-comment">//TODO</span>
+              }
+              <span class="hljs-comment">// length((1 2 3)) // 3</span>
+
+              <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">map</span>(<span class="hljs-params">list</span>) </span>{
+                <span class="hljs-comment">//TODO</span>
+              }
+
+              <span class="hljs-comment">// map(function(n){ return n * 2 }, (1 2 3))  // (2 4 6)</span>
+
+              <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">filter</span>(<span class="hljs-params">list</span>) </span>{
+                <span class="hljs-comment">//TODO</span>
+              }
+              <span class="hljs-comment">// filter(function(n){ return n &gt; 10 }, (1 12 32 6))  // (12 32)</span>
+            </code></pre>
+            <p>Implementations:</p>
+            <pre><code class="language-javascript">
+              <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">length</span>(<span class="hljs-params">list</span>) </span>{
+                <span class="hljs-keyword">if</span>(isEmpty(list)) {
+                  <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+                }
+                <span class="hljs-keyword">else</span> {
+                  <span class="hljs-keyword">return</span> <span class="hljs-number">1</span> + length(tail(list))
+                }
+              }
+
+              <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">map</span>(<span class="hljs-params">f, list</span>) </span>{
+                <span class="hljs-keyword">if</span>(isEmpty(list)) {
+                  <span class="hljs-keyword">return</span> list;
+                }
+                <span class="hljs-keyword">const</span> h = head(list)
+                <span class="hljs-keyword">const</span> t = tail(list)
+                <span class="hljs-keyword">return</span> prepend(f(h), map(f, t));
+              }
+
+              <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">filter</span>(<span class="hljs-params">f, list</span>) </span>{
+                <span class="hljs-keyword">if</span>(isEmpty(list)) {
+                  <span class="hljs-keyword">return</span> list;
+                }
+
+                <span class="hljs-keyword">const</span> h = head(list)
+                <span class="hljs-keyword">const</span> t = tail(list)
+                <span class="hljs-keyword">if</span>(f(h)) {
+                  <span class="hljs-keyword">return</span> prepend(h, filter(f, t))
+                }
+                <span class="hljs-keyword">else</span> {
+                  <span class="hljs-keyword">return</span> filter(f, t)
+                }
+              }
+            </code></pre>
+            <p>Take some time to use some of these list helpers or maybe write a few new list helpers to get you more comfortable with the lists we’ve made. Suggestions: <code>sum</code>, <code>reverse</code>, <code>reduce</code>.</p>
+            <p>Our current list structure works, but we’re using a bit of unneeded language functionality.<br>
+              We’re using:</p>
+              <ul>
+                <li>functions</li>
+                <li>strings</li>
+                <li>booleans/equality expressions</li>
+                <li>if/else statements</li>
+              </ul>
+              <p>Let’s start by removing the usage of strings inside our prepend.</p>
+              <pre><code class="language-javascript"><span class="hljs-keyword">const</span> empty = <span class="hljs-literal">null</span>
+
+                <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">isEmpty</span>(<span class="hljs-params">list</span>) </span>{
+                  <span class="hljs-keyword">return</span> list === empty
+                }
+
+                <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">prepend</span>(<span class="hljs-params">head, tail</span>) </span>{
+                  <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">select</span>) </span>{
+                    <span class="hljs-keyword">return</span> select(head, tail)
+                  }
+                }
+
+                <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">head</span>(<span class="hljs-params">list</span>) </span>{
+                  <span class="hljs-keyword">return</span> list(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">head, tail</span>) </span>{
+                    <span class="hljs-keyword">return</span> head
+                  })
+                }
+
+                <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">tail</span>(<span class="hljs-params">list</span>) </span>{
+                  <span class="hljs-keyword">return</span> list(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">head, tail</span>) </span>{
+                    <span class="hljs-keyword">return</span> tail
+                  })
+                }
+              </code></pre>
+              <p>No more strings! So, how does this work?</p>
+              <p>All head and tail need are access to the actual head and tail of a list. In our case lists are just functions, so we can give our list a select function that we can call with the values of head and tail.</p>
+              <p>Walkthrough:</p>
+              <pre><code class="language-javascript"><span class="hljs-keyword">const</span> tear_worthy_movies = prepend(<span class="hljs-string">"Cast Away"</span>, empty)
+                head(tear_worthy_movies)
+
+
+                <span class="hljs-comment">/*
+                  Step by step:
+                  1.) const myList = prepend(1, empty)
+
+                  2.) const myList = function(op) {
+                    return op(1, empty)
+                  }
+
+                  3.) head(myList)
+
+                  4.) (function(list){
+                    return list(function(head, tail) {
+                      return head;
+                    })
+                  })(myList)
+
+                  6.) myList(function(head, tail) {
+                    return head
+                  })
+
+                  7.) (function(selector) {
+                    return selector(1, empty)
+                  })(function(head, tail) {
+                    return head
+                  })
+
+                  8.) (function(head, tail) { return head })(1, empty)
+
+                  9.) 1
+                  */</span>
+                </code></pre>
+                <p>That was a lot of logic to trace through, but after some more examples it will start to click.</p>
+                <p>We are now down to using</p>
+                <ul>
+                  <li>functions</li>
+                  <li>booleans/equality expressions</li>
+                  <li>if/else statements</li>
+                </ul>
+                <p>Let’s remove those if/else statements</p>
+                <p>Currently if/else statements are only being used to test if a list is empty. One way to avoid this is to tag each list with being empty or not being empty. To do this we have to change the value of the empty list from null to a function that tags the “list” as empty. The empty function will look similar to the prepend function, but doesn’t need any reference to a head or tail.</p>
+                <p>We will add an additional parameter to our <code>selector</code> function that will either be true or false that represents whether or not the list is empty.</p>
+                <pre><code class="language-javascript"><span class="hljs-keyword">const</span> empty = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">select</span>) </span>{
+                  <span class="hljs-keyword">return</span> select(<span class="hljs-literal">null</span>, <span class="hljs-literal">null</span>, <span class="hljs-literal">true</span>) <span class="hljs-comment">// the last argument here decides that this list is empty</span>
+                }
+
+                <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">isEmpty</span>(<span class="hljs-params">list</span>) </span>{
+                  <span class="hljs-keyword">return</span> list(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">head, tail, isempty</span>) </span>{
+                    <span class="hljs-keyword">return</span> isempty
+                  })
+                }
+
+                <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">prepend</span>(<span class="hljs-params">head, tail</span>) </span>{
+                  <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">select</span>) </span>{
+                    <span class="hljs-keyword">return</span> select(head, tail, <span class="hljs-literal">false</span>)
+                  }
+                }
+
+                <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">head</span>(<span class="hljs-params">list</span>) </span>{
+                  <span class="hljs-keyword">return</span> list(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">head, tail, isempty</span>) </span>{
+                    <span class="hljs-keyword">return</span> head
+                  })
+                }
+
+                <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">tail</span>(<span class="hljs-params">list</span>) </span>{
+                  <span class="hljs-keyword">return</span> list(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">head, tail, isempty</span>) </span>{
+                    <span class="hljs-keyword">return</span> tail
+                  })
+                }
+              </code></pre>
+              <p>Our list structure is looking great. We’re only using <code>functions</code> and <code>booleans</code> our data structure.<br>
+                We’ve come quite a long way since our very first iteration, but more work can still be done. We need to remove those booleans. How can we do this though? We need some way to determine if a list is empty which means we need a way to run conditional expressions. Let’s try rewriting conditionals using functions. Sounds a bit daunting, but it’s doable.</p>
+                <p>Once again let’s take a second to review our criteria for the structure we are trying to build:<br>
+                  1.) Need to provide constants for both true and false options.<br>
+                  2.) Need to use these constants to choose between two things (essentially <code>if/else</code> statements)</p>
+                  <p>We’re going to write our true and false values as functions that choose between two things.</p>
+                  <pre><code class="language-javascript"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">truthy</span>(<span class="hljs-params">t, f</span>) </span>{
+                    <span class="hljs-keyword">return</span> t
+                  }
+
+                  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">falsey</span>(<span class="hljs-params">t, f</span>) </span>{
+                    <span class="hljs-keyword">return</span> f
+                  }
+                </code></pre>
+                <p>Our function truthy takes two things and always returns the first and our falsey function takes two things and always returns the latter.</p>
+                <p>How are these going to be used as true and false values?</p>
+                <p>Without much context these don’t make a lot of sense, but the implementation of <code>ifelse</code> should shine a bit of light on this.</p>
+                <pre><code class="language-javascript"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">ifelse</span>(<span class="hljs-params">conditional, then, else</span>) </span>{
+                  <span class="hljs-keyword">return</span> conditional(then, <span class="hljs-keyword">else</span>)
+                }
+              </code></pre>
+              <p>The conditional that is passed into <code>ifelse</code> will always be either <code>truthy</code> or <code>falsey</code>.</p>
+              <p>A few examples:</p>
+              <pre><code class="language-javascript"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">truthy</span>(<span class="hljs-params">t, f</span>) </span>{
+                <span class="hljs-keyword">return</span> t
+              }
+
+              <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">falsey</span>(<span class="hljs-params">t, f</span>) </span>{
+                <span class="hljs-keyword">return</span> f
+              }
+
+              <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">ifelse</span>(<span class="hljs-params">conditional, then, el</span>) </span>{
+                <span class="hljs-keyword">return</span> conditional(then, el)
+              }
+
+              <span class="hljs-comment">// Example usage:</span>
+              <span class="hljs-keyword">const</span> a = ifelse(falsey, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>)
+              <span class="hljs-comment">// a = 2</span>
+              <span class="hljs-keyword">const</span> b = ifelse(truthy,
+              <span class="hljs-string">"the Seahawks should have run the ball"</span>,
+              <span class="hljs-string">"oops... it was falsey"</span>)
+              <span class="hljs-comment">// b = "the Seahawks should have run the ball"</span>
+            </code></pre>
+            <p>We just wrote if/else functionality with nothing but javascript functions!</p>
+            <p>Great, but how do we apply this to our lists?<br>
+              We should just be able to replace the usages of true and false with truthy and falsey.</p>
+              <pre><code class="language-javascript"><span class="hljs-keyword">const</span> empty = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">op</span>) </span>{
+                op(<span class="hljs-literal">null</span>, <span class="hljs-literal">null</span>, truthy)
+              }
+
+              <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">isEmpty</span>(<span class="hljs-params">list</span>) </span>{
+                <span class="hljs-keyword">return</span> list(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">head, tail, isempty</span>) </span>{
+                  <span class="hljs-keyword">return</span> isempty
+                })
+              }
+
+              <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">prepend</span>(<span class="hljs-params">head, tail</span>) </span>{
+                <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">op</span>) </span>{
+                  <span class="hljs-keyword">return</span> op(head, tail, falsey)
+                }
+              }
+
+              <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">head</span>(<span class="hljs-params">list</span>) </span>{
+                <span class="hljs-keyword">return</span> list(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">head, tail, isempty</span>) </span>{
+                  <span class="hljs-keyword">return</span> head
+                })
+              }
+
+              <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">tail</span>(<span class="hljs-params">list</span>) </span>{
+                <span class="hljs-keyword">return</span> list(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">head, tail, isempty</span>) </span>{
+                  <span class="hljs-keyword">return</span> tail
+                })
+              }
+            </code></pre>
+            <p>This begs the question though: Why did we write <code>ifelse</code>?</p>
+            <p>Well, we need it for <code>isEmpty</code> to be usable inside our other list functions.<br>
+              Our old implementations of things like <code>length</code>, <code>map</code>, and <code>filter</code> relied on our old implementation of <code>isEmpty</code> returning native JS booleans. This won’t work anymore because javascript’s native if/else statements won’t work with our <code>truthy</code> and <code>falsey</code> values that are returned by our updated <code>isEmtpy</code> implementation.</p>
+              <p>Time for a <strong>refactor</strong>!</p>
+              <p>Let’s implement length again using our newly formed lists.</p>
+              <pre><code class="language-javascript"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">length</span>(<span class="hljs-params">list</span>) </span>{
+                <span class="hljs-keyword">return</span> ifelse(isEmpty(list),
+                <span class="hljs-number">0</span>,
+                <span class="hljs-number">1</span> + length(tail(list)))
+              }
+            </code></pre>
+            <p>Seems pretty simple, but there is a problem. The problem is one we can’t avoid because the issue is engrained at the language level of javascript.</p>
+            <p>To find the problem imagine we called length on the empty list.</p>
+            <pre><code class="language-javascript">length(empty)
+              <span class="hljs-comment">/* the above line would produce the following code:
+                ifelse(isEmpty(list),
+                0,
+                1 + length(tail(list)))
+                */</span>
+              </code></pre>
+              <p>Even though our list is empty and the only branch that should execute is the <code>0</code>, the <code>1 + length(tail(list))</code> will still be run because ifelse is just a function and <code>1 + length(tail(list))</code> is an argument we’ve given to that function. The <code>1 + length(tail(list))</code> will be evaluated regardless of the outcome of <code>isEmpty(list)</code>.</p>
+              <p>So, how can we avoid this issue? How do we postpone execution until we must execute a specific branch of the ifelse function? The answer to this question is the same as the answer to almost every question asked so far: functions!</p>
+              <pre><code class="language-javascript"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">length</span>(<span class="hljs-params">list</span>) </span>{
+                <span class="hljs-keyword">const</span> zero = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+                  <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>
+                }
+
+                <span class="hljs-keyword">const</span> tail_length = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+                  <span class="hljs-keyword">return</span> <span class="hljs-number">1</span> + length(tail(list))
+                }
+
+                <span class="hljs-keyword">return</span> ifelse(isEmpty(list), zero, tail_length)
+              }
+            </code></pre>
+            <p>…and this also requires us to change our original booleans as well.</p>
+            <p>From this:</p>
+            <pre><code class="language-javascript"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">truthy</span>(<span class="hljs-params">t, f</span>) </span>{
+              <span class="hljs-keyword">return</span> t
+            }
+
+            <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">falsey</span>(<span class="hljs-params">t, f</span>) </span>{
+              <span class="hljs-keyword">return</span> f
+            }
+          </code></pre>
+          <p>To this:</p>
+          <pre><code class="language-javascript"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">truthy</span>(<span class="hljs-params">t, f</span>) </span>{
+            <span class="hljs-keyword">return</span> t()
+          }
+
+          <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">falsey</span>(<span class="hljs-params">t, f</span>) </span>{
+            <span class="hljs-keyword">return</span> f()
+          }
+        </code></pre>
+        <p>Which leaves us with our final implementation for lists:</p>
+        <pre><code class="language-javascript">
+          <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">truthy</span>(<span class="hljs-params">t, f</span>) </span>{
+            <span class="hljs-keyword">return</span> t()
+          }
+
+          <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">falsey</span>(<span class="hljs-params">t, f</span>) </span>{
+            <span class="hljs-keyword">return</span> f()
+          }
+
+          <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">ifelse</span>(<span class="hljs-params">conditional, then, else</span>) </span>{
+            <span class="hljs-keyword">return</span> conditional(then, <span class="hljs-keyword">else</span>)
+          }
+
+          <span class="hljs-keyword">const</span> nil = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{} <span class="hljs-comment">// added this for the sake of completion</span>
+
+          <span class="hljs-keyword">const</span> empty = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">op</span>) </span>{
+            op(nil, nil, truthy)
+          }
+
+          <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">isEmpty</span>(<span class="hljs-params">list</span>) </span>{
+            <span class="hljs-keyword">return</span> list(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">h, t, e</span>) </span>{
+              <span class="hljs-keyword">return</span> e
+            })
+          }
+
+          <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">prepend</span>(<span class="hljs-params">head, tail</span>) </span>{
+            <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">op</span>) </span>{
+              <span class="hljs-keyword">return</span> op(head, tail, falsey)
+            }
+          }
+
+          <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">head</span>(<span class="hljs-params">list</span>) </span>{
+            <span class="hljs-keyword">return</span> list(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">head, tail, e</span>) </span>{
+              <span class="hljs-keyword">return</span> head
+            })
+          }
+
+          <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">tail</span>(<span class="hljs-params">list</span>) </span>{
+            <span class="hljs-keyword">return</span> list(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">head, tail</span>) </span>{
+              <span class="hljs-keyword">return</span> tail
+            })
+          }
+        </code></pre>
+        <p>We’ve finally arrived at our end goal! This is a list data structure using nothing but javascript functions. Keep messing around with this. Add your own list functionality or better yet, add more language functionality like numbers, let expressions, and loops (Yes, it’s possible).</p>
+        <p>Hopefully this exercise forced you to think a little differently. Trying to build something with limited language functionality often leads to very creative solutions that you wouldn’t be exposed to in your day-to-day programming.</p>
+      </body>
+      </html>
