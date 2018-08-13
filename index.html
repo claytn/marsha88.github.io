@@ -1,125 +1,110 @@
 <!DOCTYPE html>
-<html>
-<!-- Testing -->
+<html lang="en" dir="ltr">
 <head>
-<link href='https://fonts.googleapis.com/css?family=Lobster' rel='stylesheet' type='text/css'>
-<link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet' type='text/css'>
-</head>
-    <style type="text/css">
+  <meta charset="utf-8">
+  <title>Clayton Marshall</title>
+  <link href='https://fonts.googleapis.com/css?family=Lobster' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet' type='text/css'>
 
-      html{
+  <style type="text/css">
+
+    html{
+      background-color: #F4F4F4;
+    }
+
+      #main{
+          width: 90%;
+          opacity: 0.9;
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+
+          text-align: center;
+      }
+
+      h2{
+           font-family: 'Lobster', cursive;
+           display: inline;
+           font-size: 4.5em;
+           padding-top: 12%;
+      }
+
+      #greeting{
+        color: #373737;
+      }
+      #greetingName{
+        color: #c5b47c;
+      }
+
+      #endingPeriod{
+        color: #373737;
+      }
+
+      #menu{
+        margin-top:2%;
+
+      }
+
+      .styled-button{
+        border: #373737 5px solid;
+        font-family: 'Montserrat', sans-serif;
+        font-size: 2.2em;
+        color: #373737;
         background-color: #F4F4F4;
       }
 
-        #main{
-            width: 90%;
-            opacity: 0.9;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
 
-            text-align: center;
-        }
+  </style>
+</head>
+  <div id="main">
+      <h2 id="greeting">Hi, I'm </h2>
+      <h2 id="greetingName"></h2>
+      <h2 id="endingPeriod"></h2>
 
-        h2{
-             font-family: 'Lobster', cursive;
-             display: inline;
-             font-size: 4.5em;
-             padding-top: 12%;
-        }
-
-        #greeting{
-          color: #373737;
-        }
-        #greetingName{
-          color: #c5b47c;
-        }
-
-        #endingPeriod{
-          color: #373737;
-        }
-
-        #menu{
-          margin-top:2%;
-
-        }
-
-        .styled-button{
-          border: #373737 5px solid;
-          font-family: 'Montserrat', sans-serif;
-          font-size: 2.2em;
-          color: #373737;
-          background-color: #F4F4F4;
-        }
-
-
-    </style>
-
-    <div id='main'>
-        <h2 id='greeting'>Hi, I'm </h2>
-        <h2 id="greetingName"></h2>
-        <h2 id='endingPeriod'></h2>
-        <div id="menu">
+      <div id="menu">
         <button id="resume" class="styled-button" style="margin-right: 2%; margin-top: 1%;" onmouseover="onmouseoverResponse(this);" onmouseout="onmouseoutResponse(this);" onclick="openResume();">
           Resume</button>
         <button id="github" class="styled-button" style="margin-right: 2%; margin-top: 1%;" onmouseover="onmouseoverResponse(this);" onmouseout="onmouseoutResponse(this);" onclick="openGitHub();">GitHub</button>
         <button id="contact" class="styled-button" style="margin-top: 1%;" onmouseover="onmouseoverResponse(this);" onmouseout="onmouseoutResponse(this);" onclick="contactMe(this);">Contact</button>
       </div>
+  </div>
+  <script type="text/javascript">
+    window.onload = function () {
+        setTimeout(_ => {
+          const name = ['C', 'l', 'a', 'y', 't', 'o', 'n ', 'M', 'a', 'r', 's', 'h', 'a', 'l', 'l', '.']
+          const $greeting = document.getElementById('greetingName')
+          const $endingPeriod = document.getElementById('endingPeriod')
 
-
-    </div>
-
-
-
-    <script type="text/javascript">
-
-    window.onload = setTimeout(runGreeting, 400);
-
-      var greeting = "Hi, I'm ";
-      var name = "Clayton Marshall";
-      var count = 1;
-
-      function runGreeting(){
-
-        setTimeout(
-          function(){
-
-            if(name.length > 0){
-              document.getElementById('greetingName').innerHTML = document.getElementById('greetingName').innerHTML + name.substr(0,1);
-              name = name.substr(1);
-              runGreeting();
-            }else{
-              document.getElementById('endingPeriod').innerHTML = '.';
+          name.forEach((c, i) => {
+            if(c === '.') {
+              setTimeout(_ => $endingPeriod.append(c), i * 100);
             }
+            else {
+              setTimeout(_ => $greeting.append(c), i * 100)
+            }
+          })
+        }, 400)
+    }
 
-          },
-          100
-        );
+    function onmouseoverResponse(tag){
+      tag.style.opacity = 0.7;
+    }
 
-      }
+    function onmouseoutResponse(tag){
+      tag.style.opacity = 1;
+    }
 
-      function onmouseoverResponse(tag){
-        tag.style.opacity = 0.7;
-      }
+    function openGitHub(){
+      window.open('https://github.com/marsha88/');
+    }
 
-      function onmouseoutResponse(tag){
-        tag.style.opacity = 1;
-      }
+    function openResume(){
+      window.open ('ClaytonMarshallResume.pdf');
+    }
 
-
-      function openGitHub(){
-        window.open('https://github.com/marsha88/');
-      }
-
-      function openResume(){
-        window.open ('ClaytonMarshallResume.pdf');
-      }
-
-      function contactMe(){
-        window.location.href = "mailto:marsha88@purdue.edu";
-      }
-
-    </script>
-
+    function contactMe(){
+      window.location.href = "mailto:marsha88@purdue.edu";
+    }
+  </script>
 </html>
